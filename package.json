@@ -1,0 +1,11 @@
+{
+  "name": "NoteQuizz",
+  "version": "1.0.0",
+  "description": "Music notes quiz for beginners",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "furkan3458",
+  "license": "BSD"
+}
