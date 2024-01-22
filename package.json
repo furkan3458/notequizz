@@ -1,5 +1,5 @@
 {
-  "name": "NoteQuizz",
+  "name": "note_quizz",
   "version": "1.0.0",
   "description": "Music notes quiz for beginners",
   "main": "index.js",
