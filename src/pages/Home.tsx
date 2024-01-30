@@ -1,14 +1,22 @@
-import { useState,useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
-const Home = ({...props}: any) => {
+import Background from '../components/Background';
+import { Button } from '@nextui-org/react';
+import Box from '../components/Box';
+const Home = ({ ...props }: any) => {
     const [loaded, setLoaded] = useState(false);
 
     return (
         <>
             <Helmet>
                 <meta charSet="utf-8" />
-                <title>NoteQuizz - Home</title>
+                <title>NoteQuizz</title>
             </Helmet>
+            <Background>
+                <Box size={'sm'} mxAuto={true}>
+                    <Button color='primary'>TEST</Button>
+                </Box>
+            </Background>
         </>
     );
 }

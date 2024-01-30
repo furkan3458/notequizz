@@ -1,20 +1,22 @@
 import React, { useEffect, useState } from 'react'
 import ReactDOM from 'react-dom/client'
 import { HelmetProvider } from 'react-helmet-async';
-import { BrowserRouter } from 'react-router-dom'
+import { BrowserRouter, useNavigate } from 'react-router-dom'
 import { Provider, connect, useSelector } from 'react-redux';
 import Router from './router';
 import AuthContext, { AuthContextProvider } from './contexts/AuthContext';
 import Const from './utils/Const';
-import './css/index.css'
+import './css/index.css';
 import { StateType } from './states/reducers';
 import store from './states';
+import { NextUIProvider } from '@nextui-org/react';
 
 const App: React.FC = (): JSX.Element => {
   const [authenticatedUser, setAuthenticatedUser] = useState<AuthContextProvider>();
   const [authLocale, setAuthLocale] = useState(Const.GUEST_USER);
   const [loaded, setLoaded] = useState(false);
   const auth = useSelector((state: StateType) => state.auth);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (auth.isValidate) {
@@ -26,7 +28,7 @@ const App: React.FC = (): JSX.Element => {
   useEffect(() => {
     console.log(auth);
   });
-  
+
   const setAuthLevel = () => {
     auth.user ? buildAuthenticatedUser(Const.AUTH_USER, auth.user) : buildAuthenticatedUser(Const.GUEST_USER, []);
   }
@@ -56,23 +58,27 @@ const App: React.FC = (): JSX.Element => {
 
   return (
     <>
-      <BrowserRouter>
-        <HelmetProvider>
-          <AuthContext.Provider value={authenticatedUser!}>
+      <HelmetProvider>
+        <AuthContext.Provider value={authenticatedUser!}>
+          <NextUIProvider navigate={navigate}>
             <Router auth={authLocale} />
-          </AuthContext.Provider>
-        </HelmetProvider>
-      </BrowserRouter>
+          </NextUIProvider>
+        </AuthContext.Provider>
+      </HelmetProvider>
     </>
   );
 }
-const mapDispatchToProps = { };
+const mapDispatchToProps = {};
 const ConnectedApp = connect(null, mapDispatchToProps)(App);
 
 const AppBuilder = () => {
   return (
     <Provider store={store}>
-      <ConnectedApp />
+      <React.StrictMode>
+        <BrowserRouter>
+          <ConnectedApp />
+        </BrowserRouter>
+      </React.StrictMode>
     </Provider>
   );
 }
