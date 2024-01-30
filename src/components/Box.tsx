@@ -1,4 +1,4 @@
-import { FC, ReactElement } from "react";
+import { FC } from "react";
 
 interface IBoxInterface extends React.PropsWithChildren {
     children: any;
