@@ -8,7 +8,7 @@ interface ILoading {
 }
 
 const Loading:FC<ILoading> = (props:ILoading) => {
-    const [degree, setDegree] = useState<number>(props.initDegree);
+    const [degree] = useState<number>(props.initDegree);
 
     return (
         <>
