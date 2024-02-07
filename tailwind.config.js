@@ -3,6 +3,7 @@ const {nextui} = require("@nextui-org/react");
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  mode: 'jit',
   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
@@ -15,6 +16,7 @@ module.exports = {
       padding: {
         DEFAULT: '1rem',
         sm: '2rem',
+        md: '3rem',
         lg: '4rem',
         xl: '5rem',
         '2xl': '6rem',
@@ -22,7 +24,8 @@ module.exports = {
     },
   },
   darkMode: "class",
-  plugins: [nextui({
-    defaultTheme:'dark'
+  plugins: [
+    nextui({
+      defaultTheme:'dark'
   })],
 };

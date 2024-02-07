@@ -10,27 +10,42 @@ import './css/index.css';
 import { StateType } from './states/reducers';
 import store from './states';
 import { NextUIProvider } from '@nextui-org/react';
+import FingerprintJS from '@fingerprintjs/fingerprintjs';
+import Loading from './components/Loading';
 
 const App: React.FC = (): JSX.Element => {
   const [authenticatedUser, setAuthenticatedUser] = useState<AuthContextProvider>();
   const [authLocale, setAuthLocale] = useState(Const.GUEST_USER);
   const [loaded, setLoaded] = useState(false);
+  const [fingerPrintLoaded, setFingerPrintLoaded] = useState(false);
   const auth = useSelector((state: StateType) => state.auth);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (auth.isValidate) {
-      setAuthLevel();
+    if (fingerPrintLoaded) { // Add here authorization flag
       setLoaded(true);
     }
-  }, [auth.isValidate]);
+  }, [fingerPrintLoaded]);
 
   useEffect(() => {
-    console.log(auth);
-  });
+    if (!loaded) {
+      initFingerPrint();
+      setAuthLevel();
+    }
+  }, []);
 
   const setAuthLevel = () => {
     auth.user ? buildAuthenticatedUser(Const.AUTH_USER, auth.user) : buildAuthenticatedUser(Const.GUEST_USER, []);
+  }
+
+  const initFingerPrint = () => {
+    const fpPromise = FingerprintJS.load();
+    (async () => {
+      const fp = await fpPromise;
+      const result = await fp.get();
+      localStorage.setItem(process.env.VITE_REACT_APP_FINGERPRINT_NAME!, result.visitorId);
+      setFingerPrintLoaded(true);
+    })()
   }
 
   const buildAuthenticatedUser = (authType: Const, user: any) => {
@@ -56,7 +71,7 @@ const App: React.FC = (): JSX.Element => {
     setAuthenticatedUser(authUser);
   }
 
-  return (
+  return (loaded ? <><Loading initDegree={30} /></> :
     <>
       <HelmetProvider>
         <AuthContext.Provider value={authenticatedUser!}>
