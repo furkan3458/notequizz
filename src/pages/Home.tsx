@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import Background from '../components/Background';
 import { Button } from '@nextui-org/react';
 import Box from '../components/Box';
-const Home = ({ ...props }: any) => {
+const Home = () => {
     const [loaded, setLoaded] = useState(false);
 
     useEffect(() => {
