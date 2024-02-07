@@ -6,12 +6,13 @@ import { Provider, connect, useSelector } from 'react-redux';
 import Router from './router';
 import AuthContext, { AuthContextProvider } from './contexts/AuthContext';
 import Const from './utils/Const';
-import './css/index.css';
 import { StateType } from './states/reducers';
 import store from './states';
 import { NextUIProvider } from '@nextui-org/react';
 import FingerprintJS from '@fingerprintjs/fingerprintjs';
 import Loading from './components/Loading';
+import './fonts/Niconne-Regular.ttf';
+import './css/index.css';
 
 const App: React.FC = (): JSX.Element => {
   const [authenticatedUser, setAuthenticatedUser] = useState<AuthContextProvider>();

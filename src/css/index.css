@@ -7204,8 +7204,8 @@ video {
   margin-right: 4rem;
   width: 70px;
   height: 120px;
-  -webkit-mask: url('note-icon.svg') center/cover no-repeat;
-          mask: url('note-icon.svg') center/cover no-repeat;
+  -webkit-mask: url('../assets/note-icon.svg') center/cover no-repeat;
+          mask: url('../assets/note-icon.svg') center/cover no-repeat;
   background-color: hsl(var(--nextui-primary));
 }
 
@@ -7218,7 +7218,7 @@ video {
 @font-face {
   font-family: Niconne-Regular;
 
-  src: url('fonts/Niconne-Regular.ttf');
+  src: local("Niconne-Regular"), url('../fonts/Niconne-Regular.ttf') format("truetype");
 }
 
 @keyframes pulse-anim {
