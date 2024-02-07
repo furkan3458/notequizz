@@ -4,7 +4,11 @@
 @tailwind variants;
 @tailwind screens;
 
-.bg-video{
+* {
+  font-family: 'Niconne-Regular';
+}
+
+.bg-video {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -14,7 +18,70 @@
   z-index: -1000000;
 }
 
-.main-bg-video{
+.main-bg-video {
   width: 100%;
   height: 100vh;
+}
+
+.pulse-anim-cont {
+  -webkit-perspective: 1000;
+}
+
+.pulse-anim {
+  -webkit-animation: pulse-anim 2s ease 0s infinite normal both running;
+  animation: pulse-anim 2s ease 0s infinite normal both running;
+}
+
+.loading-background {
+  margin-left: 4rem;
+  margin-right: 4rem;
+  width: 70px;
+  height: 120px;
+  mask: url('note-icon.svg') center/cover no-repeat;
+  background-color: hsl(var(--nextui-primary));
+}
+
+.loading-text {
+  color: white;
+  font-size: 55px;
+  font-weight: 900;
+}
+
+@font-face {
+  font-family: Niconne-Regular;
+  src: url('fonts/Niconne-Regular.ttf');
+}
+
+@-webkit-keyframes pulse-anim {
+  0% {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+  }
+
+  50% {
+    -webkit-transform: translateZ(-600px);
+    transform: translateZ(-600px);
+  }
+
+  100% {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+  }
+}
+
+@keyframes pulse-anim {
+  0% {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+  }
+
+  50% {
+    -webkit-transform: translateZ(-600px);
+    transform: translateZ(-600px);
+  }
+
+  100% {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+  }
 }
