@@ -1,6 +1,6 @@
 import { FC } from "react";
 
-interface IBoxInterface extends React.PropsWithChildren {
+interface IBoxInterface extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
     size?: 'sm' | 'md' | 'lg' | 'xl' | '2xl';
     mxAuto?: boolean;
     className?: string;

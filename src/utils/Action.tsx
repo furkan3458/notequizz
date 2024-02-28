@@ -2,7 +2,7 @@ import Actions from './Types';
 
 interface Action {
     type: Actions,
-    payload ?: any
+    payload: any;
 }
 
 export default Action;
