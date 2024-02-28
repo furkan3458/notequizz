@@ -1,4 +1,4 @@
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import Box from "./Box";
 import Flex, { FlexType } from "./Flex";
 import { Progress } from "@nextui-org/react";
