@@ -1,6 +1,6 @@
 import { FC } from "react";
 
-interface IFlexInterface extends React.PropsWithChildren {
+interface IFlexInterface extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
     mxAuto?: boolean;
     flexType?: 'flex-1' | 'flex-auto' | 'flex-initial' | 'flex-none';
     align?: 'start' | 'end' | 'center' | 'baseline' | 'stretch';

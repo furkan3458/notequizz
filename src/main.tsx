@@ -1,52 +1,117 @@
-import React, { useEffect, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import ReactDOM from 'react-dom/client'
 import { HelmetProvider } from 'react-helmet-async';
 import { BrowserRouter, useNavigate } from 'react-router-dom'
 import { Provider, connect, useSelector } from 'react-redux';
-import Router from './router';
-import AuthContext, { AuthContextProvider } from './contexts/AuthContext';
-import Const from './utils/Const';
-import { StateType } from './states/reducers';
-import store from './states';
 import { NextUIProvider } from '@nextui-org/react';
 import FingerprintJS from '@fingerprintjs/fingerprintjs';
+import WebFont from 'webfontloader';
+import Router from './router';
+import AuthContext, { AuthContextProvider } from './contexts/AuthContext';
+import store from './states';
+import { StateType } from './states/reducers';
+import { setAuthLoading, setAuthUserType } from './states/actions/authActions';
+import { setFingerprintInitStatus, setVideoLoading, setFontLoading, setVideoContent } from './states/actions/contentActions';
+import Const from './utils/Const';
 import Loading from './components/Loading';
-import './fonts/Niconne-Regular.ttf';
+import videoBg from './assets/note_background.mp4';
 import './css/index.css';
 
-const App: React.FC = (): JSX.Element => {
+
+interface IMain {
+  setAuthLoading: Function
+  setAuthUserType: Function
+  setVideoLoading: Function
+  setFontLoading: Function
+  setFingerprintInitStatus: Function
+  setVideoContent: Function
+}
+
+const App: FC<IMain> = ({...props}: IMain): JSX.Element => {
   const [authenticatedUser, setAuthenticatedUser] = useState<AuthContextProvider>();
   const [authLocale, setAuthLocale] = useState(Const.GUEST_USER);
-  const [loaded, setLoaded] = useState(false);
-  const [fingerPrintLoaded, setFingerPrintLoaded] = useState(false);
+  const [componentsInit, setComponentsInit] = useState(false);
+  const content = useSelector((state: StateType) => state.content);
   const auth = useSelector((state: StateType) => state.auth);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (fingerPrintLoaded) { // Add here authorization flag
-      setLoaded(true);
-    }
-  }, [fingerPrintLoaded]);
+    if(content.isInit && auth.isInit)
+      handleLoading();
+
+  }, [content, auth]);
 
   useEffect(() => {
-    if (!loaded) {
+    console.log("Init");
+    if (!componentsInit) {
       initFingerPrint();
       setAuthLevel();
+      loadFonts();
+      loadVideoContent();
+      loadImages();
+      loadMusics();
     }
   }, []);
+  
+  const handleLoading = () => {
+    console.log("Handled");
+    if (!componentsInit && !content.isLoading && !auth.isLoading) {// Add here authorization flag
+      setComponentsInit(true);
+      console.log("Components ready");
+    }
+  }
 
   const setAuthLevel = () => {
-    auth.user ? buildAuthenticatedUser(Const.AUTH_USER, auth.user) : buildAuthenticatedUser(Const.GUEST_USER, []);
+    console.log("Auth Level");
+    props.setAuthLoading(true);
+    props.setAuthUserType(Const.GUEST_USER);
+    buildAuthenticatedUser(Const.GUEST_USER, []);
+    props.setAuthLoading(false);
+  }
+
+  const loadFonts = () => {
+    if(!content.isFontLoaded) {
+      WebFont.load({
+        custom: {
+          families:['Niconne-Regular'],
+          urls: ['./css/index.css']
+        },
+        active: () => {
+          console.log("FONT LOADED")
+          props.setFontLoading(true);
+        }
+      });
+    }
+  }
+
+  const loadVideoContent = () => {
+    if(!content.isVideoLoaded) {
+      (async () => {
+        props.setVideoContent(videoBg);
+        props.setVideoLoading(true);
+      })();
+    }
+  }
+
+  const loadImages = () => {
+
+  }
+
+  const loadMusics = () => {
+
   }
 
   const initFingerPrint = () => {
-    const fpPromise = FingerprintJS.load();
-    (async () => {
-      const fp = await fpPromise;
-      const result = await fp.get();
-      localStorage.setItem(process.env.VITE_REACT_APP_FINGERPRINT_NAME!, result.visitorId);
-      setFingerPrintLoaded(true);
-    })()
+    if(!content.isFingerPrintInited) {
+      console.log("FingerPrint");
+      const fpPromise = FingerprintJS.load();
+      (async () => {
+        const fp = await fpPromise;
+        const result = await fp.get();
+        localStorage.setItem(process.env.VITE_REACT_APP_FINGERPRINT_NAME!, result.visitorId);
+      })();
+      props.setFingerprintInitStatus(true);
+    }
   }
 
   const buildAuthenticatedUser = (authType: Const, user: any) => {
@@ -72,7 +137,7 @@ const App: React.FC = (): JSX.Element => {
     setAuthenticatedUser(authUser);
   }
 
-  return (loaded ? <><Loading initDegree={30} /></> :
+  return (!componentsInit ? <><Loading initDegree={0} /></> :
     <>
       <HelmetProvider>
         <AuthContext.Provider value={authenticatedUser!}>
@@ -84,7 +149,7 @@ const App: React.FC = (): JSX.Element => {
     </>
   );
 }
-const mapDispatchToProps = {};
+const mapDispatchToProps = { setAuthLoading, setAuthUserType, setVideoLoading, setFontLoading, setFingerprintInitStatus, setVideoContent };
 const ConnectedApp = connect(null, mapDispatchToProps)(App);
 
 const AppBuilder = () => {
