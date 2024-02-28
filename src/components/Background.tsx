@@ -1,4 +1,4 @@
-import { SyntheticEvent, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { connect, useSelector } from 'react-redux';
 import { setVideoLoading } from '../states/actions/contentActions';
 import { StateType } from '../states/reducers';
