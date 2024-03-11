@@ -2,10 +2,18 @@ import { FC } from "react";
 
 interface IFlexInterface extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
     mxAuto?: boolean;
+    direction?: 'row' | 'row-reverse' | 'col' | 'col-reverse';
     flexType?: 'flex-1' | 'flex-auto' | 'flex-initial' | 'flex-none';
     align?: 'start' | 'end' | 'center' | 'baseline' | 'stretch';
     justify?: 'normal' | 'start' | 'end' | 'center' | 'stretch' | 'between' | 'around' | 'evenly';
     className?: string;
+}
+
+const flexDirections = {
+    'row' : ' flex-row',
+    'row-reverse' : ' flex-row-reverse',
+    'col' : ' flex-col',
+    'col-reverse' : ' flex-col-reverse',
 }
 
 const flexTypes = {
@@ -37,10 +45,11 @@ const justifyTypes = {
 export const FlexType: FC<IFlexInterface> = (props: IFlexInterface) => {
     let mxAuto = props.mxAuto ? ' mx-auto' : '';
     let flexType = props.flexType !== undefined ? flexTypes[props.flexType] : 'flex-1';
+    let flexDirection = props.direction !== undefined ? flexDirections[props.direction] : '';
     let align = props.align !== undefined ? alignTypes[props.align] : '';
     let justify = props.justify !== undefined ? justifyTypes[props.justify] : '';
     let classN = props.className !== undefined ? ' ' + props.className : '';
-    let clazz = flexType + align + justify + mxAuto + classN;
+    let clazz = flexType + flexDirection + align + justify + mxAuto + classN;
 
     return (
         <div className={`${clazz}`}>
@@ -51,10 +60,11 @@ export const FlexType: FC<IFlexInterface> = (props: IFlexInterface) => {
 
 const Flex: FC<IFlexInterface> = (props: IFlexInterface) => {
     let mxAuto = props.mxAuto ? ' mx-auto' : '';
+    let flexDirection = props.direction !== undefined ? flexDirections[props.direction] : '';
     let align = props.align !== undefined ? alignTypes[props.align] : '';
     let justify = props.justify !== undefined ? justifyTypes[props.justify] : '';
     let classN = props.className !== undefined ? ' ' + props.className : '';
-    let clazz = 'flex' + align + justify + mxAuto + classN;
+    let clazz = 'flex' + flexDirection + align + justify + mxAuto + classN;
 
     return (
         <div className={`${clazz}`}>

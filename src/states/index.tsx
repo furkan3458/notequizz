@@ -11,6 +11,7 @@ const store = configureStore({
     devTools: process.env.NODE_ENV !== 'production',
     middleware: (getDefaultMiddleware) => getDefaultMiddleware({
         immutableCheck: false,
+        serializableCheck: false
     })
 });
 

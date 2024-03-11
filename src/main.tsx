@@ -4,6 +4,7 @@ import { HelmetProvider } from 'react-helmet-async';
 import { BrowserRouter, useNavigate } from 'react-router-dom'
 import { Provider, connect, useSelector } from 'react-redux';
 import { NextUIProvider } from '@nextui-org/react';
+import { IAddOptions, Loader, Resource } from 'resource-loader';
 import FingerprintJS from '@fingerprintjs/fingerprintjs';
 import WebFont from 'webfontloader';
 import Router from './router';
@@ -12,11 +13,9 @@ import store from './states';
 import { StateType } from './states/reducers';
 import { setAuthLoading, setAuthUserType } from './states/actions/authActions';
 import { setFingerprintInitStatus, setVideoLoading, setFontLoading, setVideoContent } from './states/actions/contentActions';
-import Const from './utils/Const';
+import Const, { ContentList } from './utils/Const';
 import Loading from './components/Loading';
-import videoBg from './assets/note_background.mp4';
 import './css/index.css';
-
 
 interface IMain {
   setAuthLoading: Function
@@ -34,27 +33,33 @@ const App: FC<IMain> = ({...props}: IMain): JSX.Element => {
   const content = useSelector((state: StateType) => state.content);
   const auth = useSelector((state: StateType) => state.auth);
   const navigate = useNavigate();
+  const loader = new Loader();
+  let init = false;
+  
+  useEffect(() => {
+    if(!init) {
+      initialize();
+    }
+  }, []);
 
   useEffect(() => {
     if(content.isInit && auth.isInit)
       handleLoading();
 
   }, [content, auth]);
-
-  useEffect(() => {
-    console.log("Init");
-    if (!componentsInit) {
-      initFingerPrint();
-      setAuthLevel();
-      loadFonts();
-      loadVideoContent();
-      loadImages();
-      loadMusics();
-    }
-  }, []);
   
+  const initialize = () => {
+    console.log("Init");
+    initFingerPrint();
+    setAuthLevel();
+    loadFonts();
+    loadVideoContent();
+    loadImages();
+    loadMusics();
+    init = true;
+  }
+
   const handleLoading = () => {
-    console.log("Handled");
     if (!componentsInit && !content.isLoading && !auth.isLoading) {// Add here authorization flag
       setComponentsInit(true);
       console.log("Components ready");
@@ -62,11 +67,12 @@ const App: FC<IMain> = ({...props}: IMain): JSX.Element => {
   }
 
   const setAuthLevel = () => {
-    console.log("Auth Level");
-    props.setAuthLoading(true);
-    props.setAuthUserType(Const.GUEST_USER);
-    buildAuthenticatedUser(Const.GUEST_USER, []);
-    props.setAuthLoading(false);
+    if(auth.isLoading) {
+      console.log("Auth Level");
+      props.setAuthUserType(Const.GUEST_USER);
+      buildAuthenticatedUser(Const.GUEST_USER, []);
+      props.setAuthLoading(false);
+    }
   }
 
   const loadFonts = () => {
@@ -77,7 +83,6 @@ const App: FC<IMain> = ({...props}: IMain): JSX.Element => {
           urls: ['./css/index.css']
         },
         active: () => {
-          console.log("FONT LOADED")
           props.setFontLoading(true);
         }
       });
@@ -86,10 +91,16 @@ const App: FC<IMain> = ({...props}: IMain): JSX.Element => {
 
   const loadVideoContent = () => {
     if(!content.isVideoLoaded) {
-      (async () => {
-        props.setVideoContent(videoBg);
+      const options: IAddOptions = {
+        url: ContentList.BG_VIDEO_SRC,
+        parentResource : new Resource("resource", {
+          url:'./assets'
+        }),
+      };
+      loader.add(options).load((loader, resource) => {
+        props.setVideoContent(resource[ContentList.BG_VIDEO_SRC]?.data);
         props.setVideoLoading(true);
-      })();
+      });
     }
   }
 
@@ -103,7 +114,6 @@ const App: FC<IMain> = ({...props}: IMain): JSX.Element => {
 
   const initFingerPrint = () => {
     if(!content.isFingerPrintInited) {
-      console.log("FingerPrint");
       const fpPromise = FingerprintJS.load();
       (async () => {
         const fp = await fpPromise;

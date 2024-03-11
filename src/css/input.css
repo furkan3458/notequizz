@@ -23,8 +23,17 @@
   height: 100vh;
 }
 
+.main-bg-opacity {
+  background-color: rgba(0, 0, 0, 1);
+}
+
 .pulse-anim-cont {
   -webkit-perspective: 1000;
+}
+
+.opacity-anim {
+  -webkit-animation: opacity-anim 2s ease-in 0s both running;
+  animation: opacity-anim 2s ease-in 0s both running;
 }
 
 .pulse-anim {
@@ -83,5 +92,65 @@
   100% {
     -webkit-transform: translateZ(0);
     transform: translateZ(0);
+  }
+}
+
+@-webkit-keyframes  opacity-anim {
+  0% {
+    opacity: 0;
+  }
+
+  10% {
+    opacity: 0.10;
+  }
+
+  25% {
+    opacity: 0.25;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+
+  60% {
+    opacity: 0.6;
+  }
+
+  75% {
+    opacity: 0.75;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes opacity-anim {
+  0% {
+    opacity: 0;
+  }
+
+  10% {
+    opacity: 0.10;
+  }
+
+  25% {
+    opacity: 0.25;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+
+  60% {
+    opacity: 0.6;
+  }
+
+  75% {
+    opacity: 0.75;
+  }
+
+  100% {
+    opacity: 1;
   }
 }
