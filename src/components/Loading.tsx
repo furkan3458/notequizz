@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from "react";
 import Box from "./Box";
 import Flex, { FlexType } from "./Flex";
-import { Button, Progress } from "@nextui-org/react";
+import { Progress } from "@nextui-org/react";
 import { connect } from "react-redux";
 import { useSelector } from "react-redux";
 import { StateType } from "../states/reducers";
