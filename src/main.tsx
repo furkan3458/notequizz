@@ -97,7 +97,7 @@ const App: FC<IMain> = ({...props}: IMain): JSX.Element => {
           url:'./assets'
         }),
       };
-      loader.add(options).load((loader, resource) => {
+      loader.add(options).load((_loader, resource) => {
         props.setVideoContent(resource[ContentList.BG_VIDEO_SRC]?.data);
         props.setVideoLoading(true);
       });

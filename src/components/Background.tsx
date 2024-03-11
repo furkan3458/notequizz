@@ -3,7 +3,6 @@ import { connect, useSelector } from 'react-redux';
 import { setVideoLoading } from '../states/actions/contentActions';
 import { StateType } from '../states/reducers';
 import Const from '../utils/Const';
-import Box from './Box';
 import Flex, { FlexType } from './Flex';
 
 interface IBackground extends React.PropsWithChildren {
