@@ -9,7 +9,7 @@ export interface authState extends state {
 
 export const initialize: authState = {
     isInit: false,
-    isLoading: false,
+    isLoading: true,
     userType: "",
 }
 
