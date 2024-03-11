@@ -1,5 +1,5 @@
 export enum ContentList {
-    BG_VIDEO_SRC = "/public/note_background.mp4",
+    BG_VIDEO_SRC = "/note_background.mp4",
 }
 
 enum Const {
