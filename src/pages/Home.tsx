@@ -39,7 +39,7 @@ const Home: FC<IHome> = ({ ...props }: IHome): JSX.Element => {
                     </Box>
                     :
                         <div>
-                            Start
+                            Coming Soon... :)
                         </div>
                     }
                     
