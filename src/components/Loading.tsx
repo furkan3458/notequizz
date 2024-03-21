@@ -32,6 +32,7 @@ const Loading: FC<ILoading> = ({ ...props }: ILoading) => {
             'isFontLoaded',
             'isFingerPrintInited',
             'isVideoLoaded',
+            'isMusicLoaded'
         ]
         const progressVal = 100 / contentList.length;
         const contentEntries = Object.entries(content);

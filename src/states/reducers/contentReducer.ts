@@ -11,6 +11,7 @@ export interface contentState extends state {
     isLoading: boolean;
     loadingBar: number;
     backgroundVideo: HTMLVideoElement | null;
+    backgroundMusic: HTMLAudioElement | null;
 }
 
 export const initialize: contentState = {
@@ -23,6 +24,7 @@ export const initialize: contentState = {
     isLoading: true,
     loadingBar: 0,
     backgroundVideo: null,
+    backgroundMusic: null,
 }
 
 const contentReducer = (state: contentState = initialize, action: Action) => {
@@ -52,6 +54,9 @@ const contentReducer = (state: contentState = initialize, action: Action) => {
             break;
         case ActionTypes.CONTENT_MUSIC_LOADING:
             newState.isMusicLoaded = action.payload.isMusicLoaded;
+            break;
+        case ActionTypes.CONTENT_SET_MUSIC:
+            newState.backgroundMusic = action.payload.backgroundMusic;
             break;
         case ActionTypes.CONTENT_REFRESH:
             newState = { ...initialize };

@@ -12,7 +12,7 @@ import AuthContext, { AuthContextProvider } from './contexts/AuthContext';
 import store from './states';
 import { StateType } from './states/reducers';
 import { setAuthLoading, setAuthUserType } from './states/actions/authActions';
-import { setFingerprintInitStatus, setVideoLoading, setFontLoading, setVideoContent } from './states/actions/contentActions';
+import { setFingerprintInitStatus, setVideoLoading, setFontLoading, setVideoContent, setMusicContent, setMusicLoading } from './states/actions/contentActions';
 import Const, { ContentList } from './utils/Const';
 import Loading from './components/Loading';
 import './css/index.css';
@@ -24,9 +24,11 @@ interface IMain {
   setFontLoading: Function
   setFingerprintInitStatus: Function
   setVideoContent: Function
+  setMusicContent: Function
+  setMusicLoading: Function
 }
 
-const App: FC<IMain> = ({...props}: IMain): JSX.Element => {
+const App: FC<IMain> = ({ ...props }: IMain): JSX.Element => {
   const [authenticatedUser, setAuthenticatedUser] = useState<AuthContextProvider>();
   const [authLocale, setAuthLocale] = useState(Const.GUEST_USER);
   const [componentsInit, setComponentsInit] = useState(false);
@@ -35,19 +37,19 @@ const App: FC<IMain> = ({...props}: IMain): JSX.Element => {
   const navigate = useNavigate();
   const loader = new Loader();
   let init = false;
-  
+
   useEffect(() => {
-    if(!init) {
+    if (!init) {
       initialize();
     }
   }, []);
 
   useEffect(() => {
-    if(content.isInit && auth.isInit)
+    if (content.isInit && auth.isInit)
       handleLoading();
 
   }, [content, auth]);
-  
+
   const initialize = () => {
     console.log("Init");
     initFingerPrint();
@@ -67,7 +69,7 @@ const App: FC<IMain> = ({...props}: IMain): JSX.Element => {
   }
 
   const setAuthLevel = () => {
-    if(auth.isLoading) {
+    if (auth.isLoading) {
       console.log("Auth Level");
       props.setAuthUserType(Const.GUEST_USER);
       buildAuthenticatedUser(Const.GUEST_USER, []);
@@ -76,10 +78,10 @@ const App: FC<IMain> = ({...props}: IMain): JSX.Element => {
   }
 
   const loadFonts = () => {
-    if(!content.isFontLoaded) {
+    if (!content.isFontLoaded) {
       WebFont.load({
         custom: {
-          families:['Niconne-Regular'],
+          families: ['Niconne-Regular'],
           urls: ['./css/index.css']
         },
         active: () => {
@@ -90,11 +92,11 @@ const App: FC<IMain> = ({...props}: IMain): JSX.Element => {
   }
 
   const loadVideoContent = () => {
-    if(!content.isVideoLoaded) {
+    if (!content.isVideoLoaded) {
       const options: IAddOptions = {
         url: ContentList.BG_VIDEO_SRC,
-        parentResource : new Resource("resource", {
-          url:'./assets'
+        parentResource: new Resource("resource", {
+          url: './assets'
         }),
       };
       loader.add(options).load((_loader, resource) => {
@@ -105,15 +107,29 @@ const App: FC<IMain> = ({...props}: IMain): JSX.Element => {
   }
 
   const loadImages = () => {
-
+    
   }
 
   const loadMusics = () => {
+    if (!content.isMusicLoaded) {
+      const options: IAddOptions = {
+        url: ContentList.BG_THEME_MUSIC,
+        
+        parentResource: new Resource("resource", {
+          url: './assets',
+        }),
+      }
 
+      loader.add(options).load((_loader, resource) => {
+        console.log(_loader, resource);
+        props.setMusicContent(resource[ContentList.BG_THEME_MUSIC]?.data);
+        props.setMusicLoading(true);
+      });
+    }
   }
 
   const initFingerPrint = () => {
-    if(!content.isFingerPrintInited) {
+    if (!content.isFingerPrintInited) {
       const fpPromise = FingerprintJS.load();
       (async () => {
         const fp = await fpPromise;
@@ -159,7 +175,16 @@ const App: FC<IMain> = ({...props}: IMain): JSX.Element => {
     </>
   );
 }
-const mapDispatchToProps = { setAuthLoading, setAuthUserType, setVideoLoading, setFontLoading, setFingerprintInitStatus, setVideoContent };
+const mapDispatchToProps = {
+  setAuthLoading,
+  setAuthUserType,
+  setVideoLoading,
+  setFontLoading,
+  setFingerprintInitStatus,
+  setVideoContent,
+  setMusicContent,
+  setMusicLoading
+};
 const ConnectedApp = connect(null, mapDispatchToProps)(App);
 
 const AppBuilder = () => {

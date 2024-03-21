@@ -13,6 +13,7 @@ const Background = ({ ...props }: IBackground) => {
 
     const content = useSelector((state: StateType) => state.content);
     const mainVideoRef = useRef<HTMLDivElement>(null);
+    const mainThemeSoundRef = useRef<HTMLDivElement>(null);
     let init = false;
 
     useEffect(() => {
@@ -28,19 +29,32 @@ const Background = ({ ...props }: IBackground) => {
         content.backgroundVideo!.loop = true;
         content.backgroundVideo!.play();
         mainVideoRef.current!.append(content.backgroundVideo!);
+
+        content.backgroundMusic!.autoplay = true;
+        content.backgroundMusic!.muted = false;
+        content.backgroundMusic!.loop = true;
+        content.backgroundMusic!.play();
+        mainThemeSoundRef.current!.append(content.backgroundMusic!);
+        document.body.addEventListener("mousemove", function () {
+            content.backgroundMusic!.play();
+        })
         init = true;
     }
 
-return (
-    <div className='main-bg-video main-bg-opacity opacity-anim select-none' ref={mainVideoRef}>
-        <Flex direction='col' mxAuto={true} align='center' justify='center' className='h-screen'>
-            <Flex mxAuto={true} align='center' justify='center' className='p-3'>
-                <FlexType flexType='flex-auto' mxAuto={true} className='text-6xl text-white drop-shadow-md antialiased opacity-anim'>{Const.APP_NAME}</FlexType>
-            </Flex>
-            <Flex>{props.children}</Flex>
-        </Flex>
-    </div>
-);
+    return (
+        <>
+            <div className='main-bg-video main-bg-opacity opacity-anim select-none' ref={mainVideoRef}>
+                <Flex direction='col' mxAuto={true} align='center' justify='center' className='h-screen'>
+                    <Flex mxAuto={true} align='center' justify='center' className='p-3'>
+                        <FlexType flexType='flex-auto' mxAuto={true} className='text-6xl text-white drop-shadow-md antialiased opacity-anim'>{Const.APP_NAME}</FlexType>
+                    </Flex>
+                    <Flex>{props.children}</Flex>
+                </Flex>
+            </div>
+            <div ref={mainThemeSoundRef}>
+            </div>
+        </>
+    );
 }
 
 const mapStateToProps = () => ({})
