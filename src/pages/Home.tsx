@@ -1,16 +1,29 @@
-import { useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
+import { connect, useSelector } from 'react-redux';
 import Background from '../components/Background';
 import { Button } from '@nextui-org/react';
 import Box from '../components/Box';
 import Const from '../utils/Const';
-const Home = () => {
+import { setGameStart } from '../states/actions/gameActions';
+import { StateType } from '../states/reducers';
+
+interface IHome {
+    setGameStart: Function;
+}
+
+const Home: FC<IHome> = ({ ...props }: IHome): JSX.Element => {
     const [loaded, setLoaded] = useState(false);
+    const game = useSelector((state: StateType) => state.game);
 
     useEffect(() => {
-        if(!loaded)
+        if (!loaded)
             setLoaded(true);
     }, []);
+
+    const startGame = () => {
+        props.setGameStart(true);
+    }
 
     return (
         <>
@@ -18,13 +31,26 @@ const Home = () => {
                 <meta charSet="utf-8" />
                 <title>{Const.APP_NAME}</title>
             </Helmet>
-            <Background>
-                <Box size={'sm'} mxAuto={true}>
-                    <Button color='secondary'>{Const.START_BUTTON}</Button>
-                </Box>
-            </Background>
+            <>
+                <Background>
+                    {!game.isGameStart ? 
+                    <Box size={'sm'} mxAuto={true}>
+                        <Button color='secondary' onClick={() => startGame()}>{Const.START_BUTTON}</Button>
+                    </Box>
+                    :
+                        <div>
+                            Start
+                        </div>
+                    }
+                    
+                </Background>
+                
+            </>
+
         </>
     );
 }
-
-export default Home;
+const mapDispatchToProps = {
+    setGameStart,
+}
+export default connect(null, mapDispatchToProps)(Home);

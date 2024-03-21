@@ -12,6 +12,7 @@ interface IBackground extends React.PropsWithChildren {
 const Background = ({ ...props }: IBackground) => {
 
     const content = useSelector((state: StateType) => state.content);
+    const game = useSelector((state: StateType) => state.game);
     const mainVideoRef = useRef<HTMLDivElement>(null);
     const mainThemeSoundRef = useRef<HTMLDivElement>(null);
     let init = false;
@@ -30,12 +31,16 @@ const Background = ({ ...props }: IBackground) => {
         content.backgroundVideo!.play();
         mainVideoRef.current!.append(content.backgroundVideo!);
 
+
         content.backgroundMusic!.autoplay = true;
         content.backgroundMusic!.muted = false;
         content.backgroundMusic!.loop = true;
+        content.backgroundMusic!.controls = false;
+        content.backgroundMusic!.volume = 0.5;
         content.backgroundMusic!.play();
         mainThemeSoundRef.current!.append(content.backgroundMusic!);
         document.body.addEventListener("mousemove", function () {
+            //
             content.backgroundMusic!.play();
         })
         init = true;
@@ -45,9 +50,11 @@ const Background = ({ ...props }: IBackground) => {
         <>
             <div className='main-bg-video main-bg-opacity opacity-anim select-none' ref={mainVideoRef}>
                 <Flex direction='col' mxAuto={true} align='center' justify='center' className='h-screen'>
-                    <Flex mxAuto={true} align='center' justify='center' className='p-3'>
-                        <FlexType flexType='flex-auto' mxAuto={true} className='text-6xl text-white drop-shadow-md antialiased opacity-anim'>{Const.APP_NAME}</FlexType>
-                    </Flex>
+                    {!game.isGameStart ?
+                        <Flex mxAuto={true} align='center' justify='center' className='p-3'>
+                            <FlexType flexType='flex-auto' mxAuto={true} className='text-6xl text-white drop-shadow-md antialiased opacity-anim'>{Const.APP_NAME}</FlexType>
+                        </Flex> : <></>
+                    }
                     <Flex>{props.children}</Flex>
                 </Flex>
             </div>

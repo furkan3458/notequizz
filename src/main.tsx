@@ -11,15 +11,14 @@ import Router from './router';
 import AuthContext, { AuthContextProvider } from './contexts/AuthContext';
 import store from './states';
 import { StateType } from './states/reducers';
-import { setAuthLoading, setAuthUserType } from './states/actions/authActions';
+import { setGameLoading } from './states/actions/gameActions';
 import { setFingerprintInitStatus, setVideoLoading, setFontLoading, setVideoContent, setMusicContent, setMusicLoading } from './states/actions/contentActions';
 import Const, { ContentList } from './utils/Const';
 import Loading from './components/Loading';
 import './css/index.css';
 
 interface IMain {
-  setAuthLoading: Function
-  setAuthUserType: Function
+  setGameLoading: Function
   setVideoLoading: Function
   setFontLoading: Function
   setFingerprintInitStatus: Function
@@ -33,7 +32,7 @@ const App: FC<IMain> = ({ ...props }: IMain): JSX.Element => {
   const [authLocale, setAuthLocale] = useState(Const.GUEST_USER);
   const [componentsInit, setComponentsInit] = useState(false);
   const content = useSelector((state: StateType) => state.content);
-  const auth = useSelector((state: StateType) => state.auth);
+  const game = useSelector((state: StateType) => state.game);
   const navigate = useNavigate();
   const loader = new Loader();
   let init = false;
@@ -45,10 +44,10 @@ const App: FC<IMain> = ({ ...props }: IMain): JSX.Element => {
   }, []);
 
   useEffect(() => {
-    if (content.isInit && auth.isInit)
+    if (content.isInit && game.isInit)
       handleLoading();
 
-  }, [content, auth]);
+  }, [content, game]);
 
   const initialize = () => {
     console.log("Init");
@@ -62,18 +61,17 @@ const App: FC<IMain> = ({ ...props }: IMain): JSX.Element => {
   }
 
   const handleLoading = () => {
-    if (!componentsInit && !content.isLoading && !auth.isLoading) {// Add here authorization flag
+    if (!componentsInit && !content.isLoading && !game.isLoading) {// Add here authorization flag
       setComponentsInit(true);
       console.log("Components ready");
     }
   }
 
   const setAuthLevel = () => {
-    if (auth.isLoading) {
+    if (game.isLoading) {
       console.log("Auth Level");
-      props.setAuthUserType(Const.GUEST_USER);
       buildAuthenticatedUser(Const.GUEST_USER, []);
-      props.setAuthLoading(false);
+      props.setGameLoading(false);
     }
   }
 
@@ -176,8 +174,7 @@ const App: FC<IMain> = ({ ...props }: IMain): JSX.Element => {
   );
 }
 const mapDispatchToProps = {
-  setAuthLoading,
-  setAuthUserType,
+  setGameLoading,
   setVideoLoading,
   setFontLoading,
   setFingerprintInitStatus,
