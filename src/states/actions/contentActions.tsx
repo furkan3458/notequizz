@@ -45,3 +45,17 @@ export const setVideoContent = (state: HTMLVideoElement) => (dispatch: Dispatch<
 
     dispatcher(ActionTypes.CONTENT_SET_VIDEO, payload, dispatch);
 }
+
+export const setMusicLoading = (state: boolean) => (dispatch: Dispatch<Action>) => {
+    const payload: contentState = initialize;
+    payload.isMusicLoaded = state;
+
+    dispatcher(ActionTypes.CONTENT_MUSIC_LOADING, payload, dispatch);
+}
+
+export const setMusicContent = (state: HTMLAudioElement) => (dispatch: Dispatch<Action>) => {
+    const payload: contentState = initialize;
+    payload.backgroundMusic = state;
+
+    dispatcher(ActionTypes.CONTENT_SET_MUSIC, payload, dispatch);
+}
